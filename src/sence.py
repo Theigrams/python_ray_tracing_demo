@@ -1,3 +1,4 @@
+import multiprocessing as mp
 from typing import List
 
 import numpy as np
@@ -34,6 +35,31 @@ class Sence:
                     v = (j + np.random.random()) / height
                     ray = self.viewport.get_ray(u, v)
                     color += self.ray_color(ray, max_depth)
+                self.canvas.set_pixel(i, j, color / samples_per_pixel)
+
+    def render_pixel(self, i, j, samples_per_pixel=4, max_depth=5):
+        color = np.zeros(3)
+        for _ in range(samples_per_pixel):
+            u = (i + np.random.random()) / self.canvas.width
+            v = (j + np.random.random()) / self.canvas.height
+            ray = self.viewport.get_ray(u, v)
+            color += self.ray_color(ray, max_depth)
+        return (i, j), color
+
+    def render_parallel(self, samples_per_pixel=4, max_depth=5, num_workers=4):
+        width, height = self.canvas.resolution
+        with mp.Pool(processes=num_workers) as pool:
+            # Map the render function to the list of pixels in the image
+            results = pool.starmap(
+                self.render_pixel,
+                [
+                    (i, j, samples_per_pixel, max_depth)
+                    for i in range(width)
+                    for j in range(height)
+                ],
+            )
+            # Set the pixel color on the canvas
+            for (i, j), color in results:
                 self.canvas.set_pixel(i, j, color / samples_per_pixel)
 
     def ray_color(self, ray: Ray, depth):

@@ -1,3 +1,5 @@
+import time
+
 import numpy as np
 
 from src import *
@@ -72,9 +74,14 @@ objects = [
     glass_ball,
     fuzz_metal_ball,
 ]
-canvas = Canvas(300, 300)
-camera = Camera()
-sence = Sence(camera=camera, objects=objects, lights=[light_source], canvas=canvas)
-sence.render(samples_per_pixel=4, max_depth=1)
-canvas.regular()
-canvas.save("image.png")
+if __name__ == "__main__":
+    canvas = Canvas(600, 600)
+    camera = Camera()
+    sence = Sence(camera=camera, objects=objects, lights=[light_source], canvas=canvas)
+    t1 = time.time()
+    sence.render(samples_per_pixel=4, max_depth=1)
+    # sence.render_parallel(samples_per_pixel=4, max_depth=1, num_workers=7)
+    t2 = time.time()
+    canvas.regular()
+    print(f"Render time: {t2-t1}")
+    canvas.save("output/image.png")
