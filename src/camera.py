@@ -65,11 +65,9 @@ class Canvas:
 
     def set_pixel(self, i, j, color):
         self.pixels[i, self.height - j - 1] = color
-        # self.pixels[j, i] = color
 
     def save(self, filename):
         plt.imsave(filename, np.sqrt(np.transpose(self.pixels, (1, 0, 2))))
-        # plt.imsave(filename, self.pixels)
 
     def regular(self):
         self.pixels[self.pixels > 1] = 1

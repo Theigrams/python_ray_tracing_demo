@@ -29,12 +29,7 @@ class Sence:
         width, height = self.canvas.resolution
         for i in tqdm(range(width), desc="Rendering"):
             for j in range(height):
-                color = np.zeros(3)
-                for _ in range(samples_per_pixel):
-                    u = (i + np.random.random()) / width
-                    v = (j + np.random.random()) / height
-                    ray = self.viewport.get_ray(u, v)
-                    color += self.ray_color(ray, max_depth)
+                _, color = self.render_pixel(i, j, samples_per_pixel, max_depth)
                 self.canvas.set_pixel(i, j, color / samples_per_pixel)
 
     def render_pixel(self, i, j, samples_per_pixel=4, max_depth=5):
