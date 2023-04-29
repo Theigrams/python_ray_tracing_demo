@@ -25,6 +25,7 @@ class Camera:
         self.aspect_ratio = aspect_ratio
         # use vertical field-of-view (fovY)
         self.fov = fov
+        self.viewport = ViewPort(self)
 
 
 class ViewPort:
@@ -51,17 +52,24 @@ class ViewPort:
         note that u,v is in [0,1]
         """
         pixel_coord = self.lower_left + u * self.horizontal + v * self.vertical
-        return Ray(self.cam_coord, pixel_coord)
+        direction = normalize(pixel_coord - self.cam_coord)
+        return Ray(self.cam_coord, direction)
 
 
 class Canvas:
-    def __init__(self, width, height):
+    def __init__(self, width=100, height=100):
+        self.resolution = (width, height)
         self.width = width
         self.height = height
-        self.pixels = np.zeros((height, width, 3))
+        self.pixels = np.zeros((width, height, 3))
 
-    def set_pixel(self, x, y, color):
-        self.pixels[y, x] = color
+    def set_pixel(self, i, j, color):
+        self.pixels[i, self.height - j - 1] = color
+        # self.pixels[j, i] = color
 
     def save(self, filename):
-        plt.imsave(filename, self.pixels)
+        plt.imsave(filename, np.sqrt(np.transpose(self.pixels, (1, 0, 2))))
+        # plt.imsave(filename, self.pixels)
+
+    def regular(self):
+        self.pixels[self.pixels > 1] = 1

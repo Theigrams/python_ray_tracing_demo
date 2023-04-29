@@ -1,8 +1,8 @@
 import numpy as np
 
-from src.lights import Ray
-from src.materials import Material
-from src.utils import normalize
+from src.lights import *
+from src.materials import *
+from src.utils import *
 
 
 class Primitive:
@@ -10,7 +10,7 @@ class Primitive:
         self.center = center
         self.material = material
 
-    def intersect(self, ray: Ray):
+    def hit(self, ray: Ray):
         pass
 
     def get_normal(self, point: np.ndarray):
@@ -22,8 +22,8 @@ class Sphere(Primitive):
         super().__init__(center, material)
         self.radius = radius
 
-    def intersect(self, ray):
-        """calculate the intersection point of a ray and a sphere
+    def hit(self, ray):
+        """calculate the hit point of a ray and a sphere
         |CP| = |CO + OP| = |CO + t * d| = r^2
         <d,d> t^2 + 2<d,CO> t + <CO,CO> - r^2 = 0
         """
@@ -53,6 +53,6 @@ class Plane(Sphere):
         Args:
             normal : the normal of the plane
         """
-        virtual_center = center - normal * 10000
-        virtual_radius = 10000
+        virtual_center = center - normal * 100
+        virtual_radius = 100
         super().__init__(virtual_center, virtual_radius, material)
