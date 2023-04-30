@@ -3,7 +3,7 @@ from src import *
 light_source = Sphere(
     center=np.array([0, 5.4, 1]),
     radius=3.0,
-    material=Material(color=np.array([10, 10, 10])),
+    material=LightMaterial(),
 )
 
 ground = Plane(
@@ -58,6 +58,10 @@ fuzz_metal_ball = Sphere(
     material=Material(color=np.array([0.8, 0.6, 0.2])),
 )
 
+light1 = PointLight(
+    position=np.array([0, 5.4 - 3.1, 1]), color=light_source.material.color
+)
+
 objects1 = [
     light_source,
     ground,
@@ -71,4 +75,4 @@ objects1 = [
     fuzz_metal_ball,
 ]
 
-lights1 = [light_source]
+lights1 = [light1]

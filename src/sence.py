@@ -5,9 +5,9 @@ import numpy as np
 from tqdm import tqdm
 
 from src.camera import *
+from src.geometry import Primitive
 from src.lights import Light
 from src.materials import Material
-from src.geometry import Primitive
 from src.utils import normalize
 
 
@@ -64,7 +64,7 @@ class Sence:
         default_color = np.array([1.0, 1.0, 1.0])
         hit_record = self.hit(ray)
         if hit_record is not None:
-            default_color = hit_record.obj.material.color
+            default_color = self.lambertian_reflect(ray, hit_record)
         return default_color
 
     def hit(self, ray: Ray):
@@ -76,6 +76,24 @@ class Sence:
                 hit_record = hit_event
                 closest_so_far = hit_event.distance
         return hit_record
+
+    def lambertian_reflect(self, cam_ray, hit_record):
+        hit_point = hit_record.point
+        obj = hit_record.obj
+        normal = obj.get_normal(hit_point)
+        diffuse_weight = obj.material.diffuse
+        default_color = np.array([0.0, 0.0, 0.0])
+        color = obj.material.color
+        # point_to_cam = np.linalg.norm(cam_ray.origin - hit_point) ** 2
+        for light in self.lights:
+            light_dir = light.get_direction(hit_point)
+            # light_irradiance = light.get_irradiance(hit_point, normal)
+            light_irradiance = 1
+            cos_theta = max(0, -np.dot(normal, light_dir))
+            default_color = (
+                default_color + color * diffuse_weight * light_irradiance * cos_theta
+            )
+        return default_color
 
 
 class HitEvent:

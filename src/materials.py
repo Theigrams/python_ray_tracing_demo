@@ -12,3 +12,8 @@ class Material:
 class WallMaterial(Material):
     def __init__(self, color=np.array([0.8, 0.8, 0.8])):
         super().__init__(ambient=1, diffuse=1, specular=0.5, color=color)
+
+
+class LightMaterial(Material):
+    def __init__(self, color=np.array([10, 10, 10])):
+        super().__init__(ambient=100, diffuse=100, specular=100, color=color)
