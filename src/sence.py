@@ -88,11 +88,9 @@ class Sence:
         for light in self.lights:
             light_dir = light.get_direction(hit_point)
             # light_irradiance = light.get_irradiance(hit_point, normal)
-            light_irradiance = 1
             cos_theta = max(0, -np.dot(normal, light_dir))
-            default_color = (
-                default_color + color * diffuse_weight * light_irradiance * cos_theta
-            )
+            default_color = default_color + color * diffuse_weight * cos_theta
+        default_color = np.clip(default_color, 0, 1)
         return default_color
 
 
