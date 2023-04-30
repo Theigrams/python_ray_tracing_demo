@@ -8,8 +8,8 @@ from src.utils import normalize
 class Camera:
     def __init__(
         self,
-        look_from=np.array([0.0, 1.0, -5.0]),
-        look_at=np.array([0.0, 1.0, -1.0]),
+        look_from=np.array([0.0, 1.0, 5.0]),
+        look_at=np.array([0.0, 1.0, 1.0]),
         fov=60,
         aspect_ratio=1,
     ):
@@ -57,17 +57,18 @@ class ViewPort:
 
 
 class Canvas:
-    def __init__(self, width=100, height=100):
+    def __init__(self, width=200, height=200):
         self.resolution = (width, height)
         self.width = width
         self.height = height
         self.pixels = np.zeros((width, height, 3))
 
     def set_pixel(self, i, j, color):
-        self.pixels[i, self.height - j - 1] = color
+        self.pixels[self.height - j - 1, i] = color
 
     def save(self, filename):
-        plt.imsave(filename, np.sqrt(np.transpose(self.pixels, (1, 0, 2))))
+        plt.imsave(filename, self.pixels)
 
     def regular(self):
         self.pixels[self.pixels > 1] = 1
+        self.pixels[self.pixels < 0] = 0

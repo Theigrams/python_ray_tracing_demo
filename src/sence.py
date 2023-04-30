@@ -7,7 +7,7 @@ from tqdm import tqdm
 from src.camera import *
 from src.lights import Light
 from src.materials import Material
-from src.objects import Primitive
+from src.geometry import Primitive
 from src.utils import normalize
 
 
