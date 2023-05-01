@@ -55,7 +55,7 @@ glass_ball = Sphere(
 fuzz_metal_ball = Sphere(
     center=np.array([-0.6, -0.3, 2.0]),
     radius=0.2,
-    material=Material(color=np.array([0.8, 0.6, 0.2])),
+    material=FuzzyMaterial(color=np.array([0.8, 0.6, 0.2])),
 )
 
 light1 = PointLight(
