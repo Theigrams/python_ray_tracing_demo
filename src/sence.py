@@ -66,7 +66,9 @@ class Sence:
             return np.array([1.0, 1.0, 1.0])
         diffuse_color = lambertian_reflect(self.lights, hit_record)
         diffuse_weight = hit_record.obj.material.diffuse
-        return diffuse_weight * diffuse_color
+        specular_color = specular_reflect(self.lights, ray, hit_record)
+        specular_weight = hit_record.obj.material.specular
+        return diffuse_weight * diffuse_color + specular_weight * specular_color
 
     def hit(self, ray: Ray):
         hit_record = None
@@ -90,6 +92,21 @@ def lambertian_reflect(lights, hit_record):
         # light_irradiance = light.get_irradiance(hit_point, normal)
         cos_theta = max(0, -np.dot(normal, light_dir))
         default_color += color * cos_theta
+    default_color = np.clip(default_color, 0, 1)
+    return default_color
+
+
+def specular_reflect(lights, cam_ray, hit_record):
+    hit_point = hit_record.point
+    obj = hit_record.obj
+    normal = obj.get_normal(hit_point)
+    default_color = np.array([0.0, 0.0, 0.0])
+    color = obj.material.color
+    for light in lights:
+        light_dir = light.get_direction(hit_point)
+        H = normalize(light_dir + cam_ray.direction)
+        cos_theta = max(0, -np.dot(normal, H))
+        default_color += color * cos_theta**10
     default_color = np.clip(default_color, 0, 1)
     return default_color
 

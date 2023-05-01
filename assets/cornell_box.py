@@ -8,39 +8,39 @@ light_source = Sphere(
 
 ground = Plane(
     center=np.array([0, -0.5, 1]),
-    material=WallMaterial(),
+    material=DiffuseMaterial(),
     normal=np.array([0, 1, 0]),
 )
 
 back_wall = Plane(
     center=np.array([0, 1, -1]),
-    material=WallMaterial(),
+    material=DiffuseMaterial(),
     normal=np.array([0, 0, 1]),
 )
 
 right_wall = Plane(
     center=np.array([1.5, 0, 1]),
-    material=WallMaterial(color=np.array([0.6, 0.0, 0.0])),
+    material=DiffuseMaterial(color=np.array([0.6, 0.0, 0.0])),
     normal=np.array([-1, 0, 0]),
 )
 
 left_wall = Plane(
     center=np.array([-1.5, 0, 1]),
-    material=WallMaterial(color=np.array([0.0, 0.6, 0.0])),
+    material=DiffuseMaterial(color=np.array([0.0, 0.6, 0.0])),
     normal=np.array([1, 0, 0]),
 )
 
 
 ceiling = Plane(
     center=np.array([0, 2.5, 1]),
-    material=WallMaterial(),
+    material=DiffuseMaterial(),
     normal=np.array([0, -1, 0]),
 )
 
 diffuse_ball = Sphere(
     center=np.array([0, -0.2, 1.5]),
     radius=0.3,
-    material=Material(color=np.array([0.8, 0.3, 0.3])),
+    material=DiffuseMaterial(color=np.array([0.8, 0.3, 0.3])),
 )
 metal_ball = Sphere(
     center=np.array([0.8, 0.2, 1]),

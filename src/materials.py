@@ -9,7 +9,7 @@ class Material:
         self.color = color
 
 
-class WallMaterial(Material):
+class DiffuseMaterial(Material):
     def __init__(self, color=np.array([0.8, 0.8, 0.8])):
         super().__init__(ambient=1, diffuse=1, specular=0, color=color)
 
