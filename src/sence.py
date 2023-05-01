@@ -64,7 +64,7 @@ class Sence:
         if hit_record is None:
             # if we hit nothing, return background color
             return np.array([1.0, 1.0, 1.0])
-        diffuse_color = self.lambertian_reflect(self.lights, hit_record)
+        diffuse_color = lambertian_reflect(self.lights, hit_record)
         diffuse_weight = hit_record.obj.material.diffuse
         return diffuse_weight * diffuse_color
 
