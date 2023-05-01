@@ -60,12 +60,13 @@ class Sence:
     def ray_color(self, ray: Ray, depth):
         if depth <= 0:
             return np.zeros(3)
-        # if we hit nothing, return background color
-        default_color = np.array([1.0, 1.0, 1.0])
         hit_record = self.hit(ray)
-        if hit_record is not None:
-            default_color = self.lambertian_reflect(ray, hit_record)
-        return default_color
+        if hit_record is None:
+            # if we hit nothing, return background color
+            return np.array([1.0, 1.0, 1.0])
+        diffuse_color = self.lambertian_reflect(self.lights, hit_record)
+        diffuse_weight = hit_record.obj.material.diffuse
+        return diffuse_weight * diffuse_color
 
     def hit(self, ray: Ray):
         hit_record = None
@@ -77,21 +78,20 @@ class Sence:
                 closest_so_far = hit_event.distance
         return hit_record
 
-    def lambertian_reflect(self, cam_ray, hit_record):
-        hit_point = hit_record.point
-        obj = hit_record.obj
-        normal = obj.get_normal(hit_point)
-        diffuse_weight = obj.material.diffuse
-        default_color = np.array([0.0, 0.0, 0.0])
-        color = obj.material.color
-        # point_to_cam = np.linalg.norm(cam_ray.origin - hit_point) ** 2
-        for light in self.lights:
-            light_dir = light.get_direction(hit_point)
-            # light_irradiance = light.get_irradiance(hit_point, normal)
-            cos_theta = max(0, -np.dot(normal, light_dir))
-            default_color = default_color + color * diffuse_weight * cos_theta
-        default_color = np.clip(default_color, 0, 1)
-        return default_color
+
+def lambertian_reflect(lights, hit_record):
+    hit_point = hit_record.point
+    obj = hit_record.obj
+    normal = obj.get_normal(hit_point)
+    default_color = np.array([0.0, 0.0, 0.0])
+    color = obj.material.color
+    for light in lights:
+        light_dir = light.get_direction(hit_point)
+        # light_irradiance = light.get_irradiance(hit_point, normal)
+        cos_theta = max(0, -np.dot(normal, light_dir))
+        default_color += color * cos_theta
+    default_color = np.clip(default_color, 0, 1)
+    return default_color
 
 
 class HitEvent:
