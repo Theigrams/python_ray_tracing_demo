@@ -50,7 +50,7 @@ metal_ball = Sphere(
 glass_ball = Sphere(
     center=np.array([-0.7, 0.0, 0.5]),
     radius=0.5,
-    material=GlassMaterial(color=np.array([1.0, 1.0, 1.0])),
+    material=Material(color=np.array([1.0, 1.0, 1.0])),
 )
 fuzz_metal_ball = Sphere(
     center=np.array([-0.6, -0.3, 2.0]),

@@ -7,7 +7,7 @@ from tqdm import tqdm
 from src.camera import *
 from src.geometry import Primitive
 from src.lights import Light
-from src.materials import *
+from src.materials import Material
 from src.utils import normalize
 
 
@@ -68,9 +68,7 @@ class Sence:
         diffuse_weight = hit_record.obj.material.diffuse
         specular_color = specular_reflect(self.lights, ray, hit_record)
         specular_weight = hit_record.obj.material.specular
-        color = diffuse_weight * diffuse_color + specular_weight * specular_color
-        shadow_weight = self.add_shadow(hit_record)
-        return color * shadow_weight
+        return diffuse_weight * diffuse_color + specular_weight * specular_color
 
     def hit(self, ray: Ray):
         hit_record = None
@@ -81,21 +79,6 @@ class Sence:
                 hit_record = hit_event
                 closest_so_far = hit_event.distance
         return hit_record
-
-    def add_shadow(self, hit_record):
-        point = hit_record.point
-        obj = hit_record.obj
-        shadow_weight = 1.0
-        for light in self.lights:
-            light_dir = light.get_direction(point)
-            light_ray = Ray(light.position, light_dir)
-            hit_from_light = self.hit(light_ray)
-        if hit_from_light.obj is not obj:
-            if isinstance(hit_from_light.obj.material, GlassMaterial):
-                shadow_weight = 0.5
-            else:
-                shadow_weight = 0
-        return shadow_weight
 
 
 def lambertian_reflect(lights, hit_record):
