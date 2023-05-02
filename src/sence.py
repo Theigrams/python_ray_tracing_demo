@@ -64,13 +64,17 @@ class Sence:
         if hit_record is None:
             # if we hit nothing, return background color
             return np.array([1.0, 1.0, 1.0])
+        ambient_color = hit_record.obj.material.color
+        ambient_weight = hit_record.obj.material.ambient
         diffuse_color = lambertian_reflect(self.lights, hit_record)
         diffuse_weight = hit_record.obj.material.diffuse
         specular_color = specular_reflect(self.lights, ray, hit_record)
         specular_weight = hit_record.obj.material.specular
-        color = diffuse_weight * diffuse_color + specular_weight * specular_color
+        reflection_color = (
+            diffuse_weight * diffuse_color + specular_weight * specular_color
+        )
         shadow_weight = self.add_shadow(hit_record)
-        return color * shadow_weight
+        return reflection_color * shadow_weight + ambient_color * ambient_weight
 
     def hit(self, ray: Ray):
         hit_record = None
