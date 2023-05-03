@@ -45,7 +45,7 @@ diffuse_ball = Sphere(
 metal_ball = Sphere(
     center=np.array([0.8, 0.2, 1]),
     radius=0.7,
-    material=Material(color=np.array([0.6, 0.8, 0.8])),
+    material=MetalMaterial(color=np.array([0.6, 0.8, 0.8])),
 )
 glass_ball = Sphere(
     center=np.array([-0.7, 0.0, 0.5]),
