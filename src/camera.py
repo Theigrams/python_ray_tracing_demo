@@ -64,7 +64,7 @@ class Canvas:
         self.pixels = np.zeros((width, height, 3))
 
     def set_pixel(self, i, j, color):
-        self.pixels[self.height - j - 1, i] = color
+        self.pixels[self.height - j - 1, i] += color
 
     def save(self, filename):
         plt.imsave(filename, np.sqrt(self.pixels))
