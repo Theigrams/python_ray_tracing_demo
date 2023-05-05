@@ -1,4 +1,7 @@
+import os
+
 import numpy as np
+from PIL import Image
 
 BLUE_COLOR = np.array([0, 0, 1])
 RED_COLOR = np.array([1, 0, 0])
@@ -47,3 +50,33 @@ def random_in_unit_sphere():
 
 def random_unit_vector():
     return normalize(random_in_unit_sphere())
+
+
+def animate(image_folder, save_name, fps=10):
+    """animate images to a gif
+
+    Args:
+        image_folder : folder contains images
+        filename : output filename
+        fps : frames per second
+    """
+
+    filenames = []
+    for filename in os.listdir(image_folder):
+        if filename.endswith(".png") and filename != "image.png":
+            filenames.append(filename)
+    filenames.sort(key=lambda x: int(x.split(".")[0]))
+    images = []
+    for filename in filenames:
+        try:
+            images.append(Image.open(os.path.join(image_folder, filename)))
+        except:
+            pass
+    Image.Image.save(
+        images[0],
+        save_name,
+        save_all=True,
+        append_images=images[1:],
+        duration=1000 // fps,
+        loop=0,
+    )
